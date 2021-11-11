@@ -14,6 +14,7 @@
     <button @click="$fetch">Refresh</button>
   </div>
   <p>{{ shop.name }}</p>
+  <!-- <p>{{ process.env.SHOPIFY_STOREFRONT_API_KEY }}</p> -->
 </div>
 </template>
 
@@ -38,14 +39,19 @@ export default {
     ).then(res => res.json())
   // },
   // async fetch() {
-    // this.shop = await fetch( 'https://oal-sample.myshopify.com/api/graphql.json', 
-    // 	{ method: 'POST', 
-    //       headers: { 'Content-Type': 'application/graphql', 
-    //                  "Access-Control-Origin": "*", 
-    //                  'X-Shopify-Storefront-Access-Token': process.env.SHOPIFY_STOREFRONT_API_KEY
-    //                },
-    //       "body": `{ shop { name } }`})
-    //       .then(response => response.json());
+    try {
+      this.shop = await fetch( 'https://oal-sample.myshopify.com/api/graphql.json', 
+    	{ method: 'POST', 
+          headers: { 'Content-Type': 'application/graphql', 
+                     "Access-Control-Origin": "*", 
+                     'X-Shopify-Storefront-Access-Token': "Access token"
+                   },
+          "body": `{ shop { name } }`})
+          .then(response => response.json());
+    } catch (error) {
+      this.shop.name = "Error in Storefront API"
+    }
+    
   }
 }
 
