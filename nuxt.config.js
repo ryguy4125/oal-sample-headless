@@ -55,6 +55,11 @@ export default {
   modules: [
   ],
 
+  // Routers:
+  router: {
+    middleware: ['storefront']
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^@storefront-ui/],
