@@ -2,7 +2,7 @@
 <div id="app">
   <h1>Hello!!!</h1>
   <SfButton class="button-center">Add to Cart</SfButton>
-  <SfBadge class="color-primary">Limited Offer</SfBadge>
+  <SfBadge class="color-secondary">Limited Offer</SfBadge>
 </div>
 </template>
 
