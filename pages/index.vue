@@ -13,8 +13,9 @@
     </ul>
     <button @click="$fetch">Refresh</button>
   </div>
-  <p>{{ shop.name }}</p>
-  <!-- <p>{{ process.env.SHOPIFY_STOREFRONT_API_KEY }}</p> -->
+  <p>{{ shop }}</p>
+  <p>Base URL: {{ $config.baseURL }}
+  <p>ENV: {{ $config.shopifyStorefrontApiKey }}</p>
 </div>
 </template>
 
@@ -33,20 +34,20 @@ export default {
         shop: []
       }
     },
-  async fetch() {
+  async fetch({$config: { baseURL, ShopifyStorefrontApiKey }}) {
     this.mountains = await fetch(
       'https://api.nuxtjs.dev/mountains'
     ).then(res => res.json())
   // },
   // async fetch() {
     try {
-      this.shop = await fetch( 'https://oal-sample.myshopify.com/api/graphql.json', 
+      this.shop = await fetch( `${baseURL}/api/graphql.json`, 
     	{ method: 'POST', 
           headers: { 'Content-Type': 'application/graphql', 
                      "Access-Control-Origin": "*", 
-                     'X-Shopify-Storefront-Access-Token': "Access token"
+                     'X-Shopify-Storefront-Access-Token': `${ShopifyStorefrontApiKey}`
                    },
-          "body": `{ shop { name } }`})
+          "body": '{ shop { name } }'})
           .then(response => response.json());
     } catch (error) {
       this.shop.name = "Error in Storefront API"

@@ -48,12 +48,20 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    '@nuxtjs/dotenv'
+    
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
   ],
+
+  // Environment variables
+  publicRuntimeConfig: {
+    baseURL: process.env.BASE_URL
+  },
+  privateRuntimeConfig: {
+    shopifyStorefrontApiKey: process.env.SHOPIFY_STOREFRONT_API_KEY
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
