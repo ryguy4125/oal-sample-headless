@@ -4,16 +4,19 @@
   <SfButton class="button-center">Add to Cart</SfButton>
   <SfBadge class="color-secondary">Limited Offer</SfBadge>
 
-  <p v-if="$fetchState.pending">Fetching mountains...</p>
+  <!-- <p v-if="$fetchState.pending">Fetching mountains...</p>
   <p v-else-if="$fetchState.error">An error occurred :(</p>
+  <div v-else> -->
+  <p v-if="error">Error: {{ error.message }}</p>
   <div v-else>
     <h1>Nuxt Mountains</h1>
     <ul>
       <li v-for="mountain of mountains">{{ mountain.title }}</li>
     </ul>
-    <button @click="$fetch">Refresh</button>
+    <button @click="$axios">Refresh</button>
   </div>
-  <p>{{ shop }}</p>
+  <p>Name:{{ shop.name }}</p>
+  <p>Shop: {{ shop }}</p>
   <p>Base URL: {{ $config.baseURL }}
   <p>ENV: {{ $config.shopifyStorefrontApiKey }}</p>
 </div>
@@ -22,6 +25,7 @@
 <script>
 import {SfButton, SfBadge } from "@storefront-ui/vue";
 import "@storefront-ui/vue/styles.scss";
+import axios from 'axios';
 export default {
   name: "Home",
   components: {
@@ -30,30 +34,40 @@ export default {
     },
   data() {
       return {
-        mountains: [],
-        shop: []
+        // mountains: [],
+        shop: [],
+        error: ''
       }
     },
-  async fetch({$config: { baseURL, ShopifyStorefrontApiKey }}) {
-    this.mountains = await fetch(
-      'https://api.nuxtjs.dev/mountains'
-    ).then(res => res.json())
-  // },
-  // async fetch() {
+  // async asyncData({ $axios, $config }) {
+  //   const mountains = await $axios.$get(`https://api.nuxtjs.dev/mountains`)
+  //   return { mountains }
+  // }
+
+  async asyncData({ $axios, $config: { baseURL, shopifyStorefrontApiKe} }) {
     try {
-      this.shop = await fetch( `${baseURL}/api/graphql.json`, 
-    	{ method: 'POST', 
-          headers: { 'Content-Type': 'application/graphql', 
-                     "Access-Control-Origin": "*", 
-                     'X-Shopify-Storefront-Access-Token': `${ShopifyStorefrontApiKey}`
-                   },
-          "body": '{ shop { name } }'})
-          .then(response => response.json());
+      const mountains = await $axios.$get(`https://api.nuxtjs.dev/mountains`)
+      return { mountains }
     } catch (error) {
-      this.shop.name = "Error in Storefront API"
+      return { error }
     }
-    
-  }
+  },
+
+  // async asyncData( { $axios, $config: { baseURL, shopifyStorefrontApiKey} }){
+  //   try {
+  //     const shop = await $axios.$post(`${baseURL}`, {
+  //       headers: { 'Content-Type': 'application/graphql', 
+  //                    "Access-Control-Origin": "*", 
+  //                    'X-Shopify-Storefront-Access-Token': `${shopifyStorefrontApiKey}`
+  //                  },
+  //         body: '{ shop { name } }'
+  //     })
+  //     return { shop }
+  //   } catch (error) {
+  //     return {error}
+  //   }
+  // }
+
 }
 
 </script>
